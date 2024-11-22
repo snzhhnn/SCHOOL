@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/event")
+@CrossOrigin
 public class EventController implements IEventController {
 
     private IEventService service;

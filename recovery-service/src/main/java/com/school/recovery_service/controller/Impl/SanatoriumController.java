@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/sanatorium")
+@CrossOrigin
 public class SanatoriumController implements ISanatoriumController {
 
     private ISanatoriumService service;

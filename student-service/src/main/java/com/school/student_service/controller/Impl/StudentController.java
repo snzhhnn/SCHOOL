@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/api/student")
 @AllArgsConstructor
+@CrossOrigin
 public class StudentController implements IStudentController {
 
     private IStudentService service;

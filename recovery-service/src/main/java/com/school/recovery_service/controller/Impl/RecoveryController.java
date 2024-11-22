@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/recovery")
+@CrossOrigin
 public class RecoveryController implements IRecoveryController {
 
     private IRecoveryService service;

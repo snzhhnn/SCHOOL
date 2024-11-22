@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/typeWrit")
+@CrossOrigin
 public class TypeWritController implements ITypeWritController {
 
     private ITypeWritService service;

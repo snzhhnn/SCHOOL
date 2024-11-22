@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/api/parent")
 @AllArgsConstructor
+@CrossOrigin
 public class ParentController implements IParentController {
 
     private IParentService service;
