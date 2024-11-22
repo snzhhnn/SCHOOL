@@ -1,0 +1,54 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=school
+    volumes:
+      - mysql_data:/data/db
+    networks:
+      - app-network
+
+  student-service:
+    build: /student-service
+    container_name: student-service
+    ports:
+      - "8082:8082"
+    environment:
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=school
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    restart: always
+
+  application-service:
+    build: /application-service
+    container_name: application-service
+    ports:
+      - "8083:8083"
+    environment:
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=school
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    restart: always
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge
