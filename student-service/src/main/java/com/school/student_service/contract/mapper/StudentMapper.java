@@ -1,9 +1,13 @@
 package com.school.student_service.contract.mapper;
 
+import com.school.student_service.contract.ClassDTO;
 import com.school.student_service.contract.StudentDTO;
 import com.school.student_service.model.Student;
+import com.school.student_service.service.ClassService;
+import org.springframework.web.client.RestTemplate;
 
 public class StudentMapper {
+
     public static Student toEntity(StudentDTO studentDTO) {
         return Student.builder()
                 .id(studentDTO.getId())
@@ -25,10 +29,13 @@ public class StudentMapper {
                 .idClass(studentDTO.getIdClass())
                 .parents(studentDTO.getParents())
                 .events(studentDTO.getEvents())
+                .idClass(studentDTO.getIdClass())
                 .build();
     }
 
     public static StudentDTO toDTO(Student student) {
+        ClassService classService = new ClassService(new RestTemplate());
+        ClassDTO classDTO = classService.getObjectFromRemoteService(student.getIdClass());
         return StudentDTO.builder()
                 .id(student.getId())
                 .lastname(student.getLastname())
@@ -49,6 +56,7 @@ public class StudentMapper {
                 .idClass(student.getIdClass())
                 .parents(student.getParents())
                 .events(student.getEvents())
+                .classDTO(classDTO)
                 .build();
     }
 }

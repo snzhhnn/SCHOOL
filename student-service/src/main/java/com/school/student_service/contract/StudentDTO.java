@@ -31,4 +31,5 @@ public class StudentDTO {
     private UUID idClass;
     private List<Parent> parents;
     private List<Event> events;
+    private ClassDTO classDTO;
 }

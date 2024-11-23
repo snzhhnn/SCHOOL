@@ -16,4 +16,5 @@ public class ParentDTO {
     private String phone;
     private String workAddress;
     private List<UUID> studentsUUID;
+    private ClassDTO classDTO;
 }
