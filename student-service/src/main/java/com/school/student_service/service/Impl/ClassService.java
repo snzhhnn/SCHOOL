@@ -1,4 +1,4 @@
-package com.school.student_service.service;
+package com.school.student_service.service.Impl;
 
 import com.school.student_service.contract.ClassDTO;
 import org.springframework.beans.factory.annotation.Autowired;

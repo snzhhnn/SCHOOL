@@ -3,7 +3,7 @@ package com.school.student_service.contract.mapper;
 import com.school.student_service.contract.ClassDTO;
 import com.school.student_service.contract.StudentDTO;
 import com.school.student_service.model.Student;
-import com.school.student_service.service.ClassService;
+import com.school.student_service.service.Impl.ClassService;
 import org.springframework.web.client.RestTemplate;
 
 public class StudentMapper {

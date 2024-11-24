@@ -1,6 +1,8 @@
 package com.school.recovery_service.service.Impl;
 
+import com.school.recovery_service.configuration.RestTemplateConfig;
 import com.school.recovery_service.contract.RecoveryDTO;
+import com.school.recovery_service.contract.StudentDTO;
 import com.school.recovery_service.contract.mapper.RecoveryMapper;
 import com.school.recovery_service.model.Recovery;
 import com.school.recovery_service.repository.IRecoveryRepository;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,12 @@ public class RecoveryService implements IRecoveryService {
     @Override
     @Async
     public CompletableFuture<RecoveryDTO> save(RecoveryDTO recoveryDTO) {
+        StudentDTO studentDTO = StudentDTO.builder()
+                .id(recoveryDTO.getIdStudent())
+                .sanatoriumCurrentYear(true)
+                .build();
+        StudentService studentService = new StudentService(new RestTemplate());
+        studentService.updateStudent(studentDTO);
         return CompletableFuture.completedFuture(RecoveryMapper.toDTO(repo.save(RecoveryMapper.toEntity(recoveryDTO))));
     }
 
