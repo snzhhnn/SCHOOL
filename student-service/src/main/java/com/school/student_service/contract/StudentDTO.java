@@ -24,7 +24,7 @@ public class StudentDTO {
     private String residentialStreet;
     private String residentialHouse;
     private String residentialApartment;
-    private String dateOfEnrollment;
+    private LocalDate dateOfEnrollment;
     private String pioneerOrganization;
     private List<String> familyStatus;
     private Boolean sanatoriumCurrentYear;

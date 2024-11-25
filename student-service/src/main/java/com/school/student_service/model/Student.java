@@ -39,7 +39,7 @@ public class Student {
     private String residentialStreet;
     private String residentialHouse;
     private String residentialApartment;
-    private String dateOfEnrollment;
+    private LocalDate dateOfEnrollment;
     private String pioneerOrganization;
     @ElementCollection
     @CollectionTable(name = "student_family_status", joinColumns = @JoinColumn(name = "student_id"))
