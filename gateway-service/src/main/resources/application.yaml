@@ -1,0 +1,67 @@
+spring:
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: student-route
+            uri: http://localhost:8082
+            predicates:
+              - Path=/event/**
+            filters:
+              - PrefixPath=/api
+
+          - id: student-route
+            uri: http://localhost:8082
+            predicates:
+              - Path=/parent/**
+            filters:
+              - PrefixPath=/api
+
+          - id: student-route
+            uri: http://localhost:8082
+            predicates:
+              - Path=/student/**
+            filters:
+              - PrefixPath=/api
+
+          - id: application-route
+            uri: http://localhost:8083
+            predicates:
+              - Path=/application/**
+            filters:
+              - PrefixPath=/api
+
+          - id: application-route
+            uri: http://localhost:8083
+            predicates:
+              - Path=/group/**
+            filters:
+              - PrefixPath=/api
+
+          - id: recovery-route
+            uri: http://localhost:8084
+            predicates:
+              - Path=/recovery/**
+            filters:
+              - PrefixPath=/api
+
+          - id: recovery-route
+            uri: http://localhost:8084
+            predicates:
+              - Path=/sanatorium/**
+            filters:
+              - PrefixPath=/api
+
+          - id: writ-route
+            uri: http://localhost:8085
+            predicates:
+              - Path=/writ/**
+            filters:
+              - PrefixPath=/api
+
+          - id: writ-route
+            uri: http://localhost:8085
+            predicates:
+              - Path=/typeWrit/**
+            filters:
+              - PrefixPath=/api
