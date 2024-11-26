@@ -34,11 +34,9 @@ public class RecoveryService implements IRecoveryService {
     @Override
     @Async
     public CompletableFuture<RecoveryDTO> save(RecoveryDTO recoveryDTO) {
-        StudentDTO studentDTO = StudentDTO.builder()
-                .id(recoveryDTO.getIdStudent())
-                .sanatoriumCurrentYear(true)
-                .build();
         StudentService studentService = new StudentService(new RestTemplate());
+        StudentDTO studentDTO = studentService.getObjectFromRemoteService(recoveryDTO.getIdStudent());
+        studentDTO.setSanatoriumCurrentYear(true);
         studentService.updateStudent(studentDTO);
         return CompletableFuture.completedFuture(RecoveryMapper.toDTO(repo.save(RecoveryMapper.toEntity(recoveryDTO))));
     }

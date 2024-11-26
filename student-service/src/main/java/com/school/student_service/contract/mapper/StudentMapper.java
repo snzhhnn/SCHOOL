@@ -29,7 +29,6 @@ public class StudentMapper {
                 .idClass(studentDTO.getIdClass())
                 .parents(studentDTO.getParents())
                 .events(studentDTO.getEvents())
-                .idClass(studentDTO.getIdClass())
                 .build();
     }
 

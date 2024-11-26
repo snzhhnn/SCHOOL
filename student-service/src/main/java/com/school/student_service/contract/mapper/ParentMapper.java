@@ -13,6 +13,7 @@ public class ParentMapper {
 
     public static Parent toEntity(ParentDTO parentDTO) {
         List<Student> students = new ArrayList<>();
+        System.out.println("size" + parentDTO.getStudentsUUID().size());
         if (parentDTO.getStudentsUUID() != null) {
             students = parentDTO.getStudentsUUID()
                     .stream()
@@ -32,6 +33,7 @@ public class ParentMapper {
 
     public static ParentDTO toDTO(Parent parent) {
         List<UUID> studentIds = new ArrayList<>();
+        System.out.println("size" + parent.getStudents().size());
         if (parent.getStudents() != null) {
              studentIds = parent.getStudents()
                     .stream()

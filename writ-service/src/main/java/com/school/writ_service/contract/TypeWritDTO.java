@@ -12,5 +12,4 @@ public class TypeWritDTO {
     private UUID id;
     private String title;
     private String description;
-    private List<UUID> writsUUID;
 }

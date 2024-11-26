@@ -1,12 +1,16 @@
 package com.school.recovery_service.contract;
 
 import lombok.Builder;
+import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+@Data
 @Builder
+@Setter
 public class StudentDTO {
     private UUID id;
     private String lastname;

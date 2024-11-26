@@ -3,14 +3,14 @@ spring:
     gateway:
       mvc:
         routes:
-          - id: student-route
+          - id: event-route
             uri: http://localhost:8082
             predicates:
               - Path=/event/**
             filters:
               - PrefixPath=/api
 
-          - id: student-route
+          - id: parent-route
             uri: http://localhost:8082
             predicates:
               - Path=/parent/**
@@ -31,7 +31,7 @@ spring:
             filters:
               - PrefixPath=/api
 
-          - id: application-route
+          - id: group-route
             uri: http://localhost:8083
             predicates:
               - Path=/group/**
@@ -45,7 +45,7 @@ spring:
             filters:
               - PrefixPath=/api
 
-          - id: recovery-route
+          - id: sanatorium-route
             uri: http://localhost:8084
             predicates:
               - Path=/sanatorium/**
@@ -59,7 +59,7 @@ spring:
             filters:
               - PrefixPath=/api
 
-          - id: writ-route
+          - id: typeWrit-route
             uri: http://localhost:8085
             predicates:
               - Path=/typeWrit/**

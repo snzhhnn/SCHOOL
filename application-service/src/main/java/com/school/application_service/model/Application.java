@@ -1,10 +1,6 @@
 package com.school.application_service.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +24,6 @@ public class Application {
     private int countDiet;
     private int totalCount;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Group group;
 }
