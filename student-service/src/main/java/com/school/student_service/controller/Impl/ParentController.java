@@ -21,42 +21,42 @@ public class ParentController implements IParentController {
     private IParentService service;
 
     @Override
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
     public CompletableFuture<ParentDTO> getById(@PathVariable UUID id) {
         return service.getById(id);
     }
 
     @Override
-    @RequestMapping("/save")
+    @PostMapping("/save")
     @ResponseStatus(code = HttpStatus.CREATED)
     public CompletableFuture<ParentDTO> save(@RequestBody ParentDTO parentDTO) {
         return service.save(parentDTO);
     }
 
     @Override
-    @RequestMapping("/update")
+    @PutMapping("/update")
     @ResponseStatus(code = HttpStatus.OK)
     public CompletableFuture<ParentDTO> update(@RequestBody ParentDTO parentDTO) {
         return service.update(parentDTO);
     }
 
     @Override
-    @RequestMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable UUID id) {
         service.deleteById(id);
     }
 
     @Override
-    @RequestMapping("/findAll")
+    @GetMapping("/findAll")
     @ResponseStatus(code = HttpStatus.OK)
     public CompletableFuture<List<ParentDTO>> findAll() {
         return service.findAll();
     }
 
     @Override
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @ResponseStatus(code = HttpStatus.OK)
     public CompletableFuture<List<ParentDTO>> findAll(Pageable pageable) {
         return service.findAll(pageable);

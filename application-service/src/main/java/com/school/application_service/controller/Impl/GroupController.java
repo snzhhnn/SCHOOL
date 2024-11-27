@@ -28,21 +28,21 @@ public class GroupController implements IGroupController {
     }
 
     @Override
-    @RequestMapping("/save")
+    @PostMapping("/save")
     @ResponseStatus(code = HttpStatus.CREATED)
     public CompletableFuture<GroupDTO> save(@RequestBody GroupDTO groupDTO) {
         return service.save(groupDTO);
     }
 
     @Override
-    @RequestMapping("/update")
+    @PutMapping("/update")
     @ResponseStatus(code = HttpStatus.OK)
     public CompletableFuture<GroupDTO> update(@RequestBody GroupDTO groupDTO) {
         return service.update(groupDTO);
     }
 
     @Override
-    @RequestMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable UUID id) {
         service.deleteById(id);
@@ -56,7 +56,7 @@ public class GroupController implements IGroupController {
     }
 
     @Override
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @ResponseStatus(code = HttpStatus.OK)
     public CompletableFuture<List<GroupDTO>> findAll(Pageable pageable) {
         return service.findAll(pageable);
