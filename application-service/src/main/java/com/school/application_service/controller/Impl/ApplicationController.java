@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 
 @RestController
-@RequestMapping("api/application")
+@RequestMapping("/api/application")
 @AllArgsConstructor
 @CrossOrigin
 public class ApplicationController implements IApplicationController {

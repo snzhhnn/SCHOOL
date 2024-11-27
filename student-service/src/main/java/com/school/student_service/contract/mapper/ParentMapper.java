@@ -3,6 +3,8 @@ package com.school.student_service.contract.mapper;
 import com.school.student_service.contract.ParentDTO;
 import com.school.student_service.model.Parent;
 import com.school.student_service.model.Student;
+import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +14,6 @@ import java.util.stream.Collectors;
 public class ParentMapper {
 
     public static Parent toEntity(ParentDTO parentDTO) {
-        List<Student> students = new ArrayList<>();
-        System.out.println("size" + parentDTO.getStudentsUUID().size());
-        if (parentDTO.getStudentsUUID() != null) {
-            students = parentDTO.getStudentsUUID()
-                    .stream()
-                    .map((id) -> Student.builder().id(id).build())
-                    .collect(Collectors.toList());
-        }
         return Parent.builder()
                 .id(parentDTO.getId())
                 .lastname(parentDTO.getLastname())
@@ -27,13 +21,11 @@ public class ParentMapper {
                 .surname(parentDTO.getSurname())
                 .phone(parentDTO.getPhone())
                 .workAddress(parentDTO.getWorkAddress())
-                .students(students)
                 .build();
     }
 
     public static ParentDTO toDTO(Parent parent) {
         List<UUID> studentIds = new ArrayList<>();
-        System.out.println("size" + parent.getStudents().size());
         if (parent.getStudents() != null) {
              studentIds = parent.getStudents()
                     .stream()

@@ -17,6 +17,15 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:5173")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+    }
+
+    @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         WebMvcConfigurer.super.extendMessageConverters(converters);
         converters.add(new MappingJackson2HttpMessageConverter(
