@@ -36,14 +36,14 @@ public class ApplicationController implements IApplicationController {
     }
 
     @Override
-    @PostMapping("/update")
+    @PutMapping("/update")
     @ResponseStatus(code = HttpStatus.OK)
     public CompletableFuture<ApplicationDTO> update(@RequestBody ApplicationDTO applicationDTO) {
         return service.update(applicationDTO);
     }
 
     @Override
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable UUID id) {
         service.deleteById(id);
@@ -57,7 +57,7 @@ public class ApplicationController implements IApplicationController {
     }
 
     @Override
-    @PostMapping("/list")
+    @GetMapping("/list")
     @ResponseStatus(code = HttpStatus.OK)
     public CompletableFuture<List<ApplicationDTO>> findAll(Pageable pageable) {
         return service.findAll(pageable);
