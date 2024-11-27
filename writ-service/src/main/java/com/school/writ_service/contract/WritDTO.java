@@ -13,5 +13,5 @@ public class WritDTO {
     private UUID id;
     private LocalDate date;
     private UUID idTypeWrit;
-    private List<UUID> studentUUID;
+    private List<StudentDTO> students;
 }

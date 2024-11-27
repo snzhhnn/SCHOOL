@@ -1,6 +1,5 @@
 package com.school.writ_service.model;
 
-import com.school.writ_service.contract.StudentDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +23,7 @@ public class Writ {
     private LocalDate date;
     @ElementCollection
     @CollectionTable(name = "student_dtos", joinColumns = @JoinColumn(name = "writ_id"))
-    List<UUID> studentDTOS;
+    List<UUID> studentUUID;
 
     @ManyToOne
     private TypeWrit typeWrit;
