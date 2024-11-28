@@ -1,10 +1,13 @@
 package com.school.student_service.service.Impl;
 
 import com.school.student_service.contract.ParentDTO;
+import com.school.student_service.contract.StudentDTO;
 import com.school.student_service.contract.mapper.ParentMapper;
+import com.school.student_service.contract.mapper.StudentMapper;
 import com.school.student_service.model.Parent;
 import com.school.student_service.model.Student;
 import com.school.student_service.repository.IParentRepository;
+import com.school.student_service.repository.IStudentRepository;
 import com.school.student_service.service.IParentService;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
@@ -24,7 +27,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ParentService implements IParentService {
 
-    private EntityManager entityManager;
+    private IStudentRepository studentRepo;
 
 
     private IParentRepository repo;
@@ -32,24 +35,52 @@ public class ParentService implements IParentService {
     @Override
     @Async
     public CompletableFuture<ParentDTO> getById(UUID id) {
-        return CompletableFuture.completedFuture(ParentMapper.toDTO(repo.getParentById(id)));
+        Parent parent = repo.getParentById(id);
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        for (UUID uuid: parent.getStudentsUUID()) {
+            studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+        }
+        ParentDTO parentDTO = ParentMapper.toDTO(parent);
+        parentDTO.setStudentsDTO(studentDTOS);
+        return CompletableFuture.completedFuture(parentDTO);
     }
 
     @Override
     @Async
     public CompletableFuture<ParentDTO> save(ParentDTO parentDTO) {
         Parent parent = ParentMapper.toEntity(parentDTO);
-        List<Student> students = parentDTO.getStudentsUUID().stream()
-                .map(id -> entityManager.find(Student.class, id))
-                .collect(Collectors.toList());
-        parent.setStudents(students);
-        return CompletableFuture.completedFuture(ParentMapper.toDTO(repo.save(parent)));
+        List<UUID> studentUUIDs = parentDTO.getStudentsUUID();
+        parent.setStudentsUUID(studentUUIDs);
+
+        Parent savedParent = repo.save(parent);
+
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        for (UUID uuid: savedParent.getStudentsUUID()) {
+            studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+        }
+
+        ParentDTO savedParentDTO = ParentMapper.toDTO(savedParent);
+        savedParentDTO.setStudentsDTO(studentDTOS);
+        return CompletableFuture.completedFuture(savedParentDTO);
     }
 
     @Override
     @Async
     public CompletableFuture<ParentDTO> update(ParentDTO parentDTO) {
-        return CompletableFuture.completedFuture(ParentMapper.toDTO(repo.save(ParentMapper.toEntity(parentDTO))));
+        Parent parent = ParentMapper.toEntity(parentDTO);
+        List<UUID> studentUUIDs = parentDTO.getStudentsUUID();
+        parent.setStudentsUUID(studentUUIDs);
+
+        Parent savedParent = repo.save(parent);
+
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        for (UUID uuid: savedParent.getStudentsUUID()) {
+            studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+        }
+
+        ParentDTO savedParentDTO = ParentMapper.toDTO(savedParent);
+        savedParentDTO.setStudentsDTO(studentDTOS);
+        return CompletableFuture.completedFuture(savedParentDTO);
     }
 
     @Override
@@ -63,7 +94,15 @@ public class ParentService implements IParentService {
     public CompletableFuture<List<ParentDTO>> findAll() {
         Iterable<Parent> parents = repo.findAll();
         List<ParentDTO> parentDTOS = new ArrayList<>();
-        parents.forEach(parent -> parentDTOS.add(ParentMapper.toDTO(parent)));
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        parents.forEach(parent -> {
+            for (UUID uuid: parent.getStudentsUUID()) {
+                studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+            }
+            ParentDTO parentDTO = ParentMapper.toDTO(parent);
+            parentDTO.setStudentsDTO(studentDTOS);
+            parentDTOS.add(parentDTO);
+        });
         return CompletableFuture.completedFuture(parentDTOS);
     }
 
@@ -72,6 +111,16 @@ public class ParentService implements IParentService {
     @Async
     public CompletableFuture<List<ParentDTO>> findAll(Pageable pageable) {
         Page<Parent> parents = repo.findAll(pageable);
-        return CompletableFuture.completedFuture(parents.map(ParentMapper::toDTO).getContent());
+        List<ParentDTO> parentDTOS = new ArrayList<>();
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        parents.forEach(parent -> {
+            for (UUID uuid: parent.getStudentsUUID()) {
+                studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+            }
+            ParentDTO parentDTO = ParentMapper.toDTO(parent);
+            parentDTO.setStudentsDTO(studentDTOS);
+            parentDTOS.add(parentDTO);
+        });
+        return CompletableFuture.completedFuture(parentDTOS);
     }
 }

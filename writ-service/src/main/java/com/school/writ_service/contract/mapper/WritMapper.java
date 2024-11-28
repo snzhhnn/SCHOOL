@@ -14,14 +14,11 @@ import java.util.stream.Collectors;
 
 public class WritMapper {
     public static Writ toEntity(WritDTO writDTO) {
-        List<UUID> uuids = writDTO.getStudents().stream()
-                .map(StudentDTO::getId)
-                .toList();
         return Writ.builder()
                 .id(writDTO.getId())
                 .date(writDTO.getDate())
                 .typeWrit(TypeWrit.builder().id(writDTO.getIdTypeWrit()).build())
-                .studentUUID(uuids)
+                .studentUUID(writDTO.getStudentUUID())
                 .build();
     }
 
@@ -36,6 +33,7 @@ public class WritMapper {
                 .id(writ.getId())
                 .date(writ.getDate())
                 .idTypeWrit(writ.getTypeWrit().getId())
+                .studentUUID(writ.getStudentUUID())
                 .students(studentDTOS)
                 .build();
     }

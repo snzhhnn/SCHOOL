@@ -14,4 +14,5 @@ public class EventDTO {
     private String title;
     private LocalDate date;
     private List<UUID> studentUUID;
+    private List<StudentDTO> studentDTOS;
 }

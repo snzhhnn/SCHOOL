@@ -21,17 +21,11 @@ public class ParentMapper {
                 .surname(parentDTO.getSurname())
                 .phone(parentDTO.getPhone())
                 .workAddress(parentDTO.getWorkAddress())
+                .studentsUUID(parentDTO.getStudentsUUID())
                 .build();
     }
 
     public static ParentDTO toDTO(Parent parent) {
-        List<UUID> studentIds = new ArrayList<>();
-        if (parent.getStudents() != null) {
-             studentIds = parent.getStudents()
-                    .stream()
-                    .map(Student::getId)
-                    .toList();
-        }
         return ParentDTO.builder()
                 .id(parent.getId())
                 .lastname(parent.getLastname())
@@ -39,7 +33,7 @@ public class ParentMapper {
                 .surname(parent.getSurname())
                 .phone(parent.getPhone())
                 .workAddress(parent.getWorkAddress())
-                .studentsUUID(studentIds)
+                .studentsUUID(parent.getStudentsUUID())
                 .build();
     }
 }

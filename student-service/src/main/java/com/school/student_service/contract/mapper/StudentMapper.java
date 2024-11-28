@@ -28,7 +28,6 @@ public class StudentMapper {
                 .sanatoriumCurrentYear(studentDTO.getSanatoriumCurrentYear())
                 .idClass(studentDTO.getIdClass())
                 .parents(studentDTO.getParents())
-                .events(studentDTO.getEvents())
                 .build();
     }
 
@@ -54,7 +53,6 @@ public class StudentMapper {
                 .sanatoriumCurrentYear(student.getSanatoriumCurrentYear())
                 .idClass(student.getIdClass())
                 .parents(student.getParents())
-                .events(student.getEvents())
                 .classDTO(classDTO)
                 .build();
     }

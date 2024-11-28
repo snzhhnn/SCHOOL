@@ -1,10 +1,6 @@
 package com.school.student_service.model;
 
-import jakarta.persistence.Table;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +14,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "student")
+@Table(name = "event")
 @Entity
 public class Event {
     @Id
@@ -26,6 +22,10 @@ public class Event {
     private UUID id;
     private String title;
     private LocalDate date;
+
+    @ElementCollection
+    @CollectionTable(name = "student_save", joinColumns = @JoinColumn(name = "event_id"))
+    private List<UUID> studentUUID;
 
     @ManyToMany(mappedBy = "events")
     private List<Student> students;

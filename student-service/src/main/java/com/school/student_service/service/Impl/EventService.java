@@ -1,10 +1,15 @@
 package com.school.student_service.service.Impl;
 
 import com.school.student_service.contract.EventDTO;
+import com.school.student_service.contract.StudentDTO;
 import com.school.student_service.contract.mapper.EventMapper;
+import com.school.student_service.contract.mapper.StudentMapper;
 import com.school.student_service.model.Event;
+import com.school.student_service.model.Student;
 import com.school.student_service.repository.IEventRepository;
+import com.school.student_service.repository.IStudentRepository;
 import com.school.student_service.service.IEventService;
+import com.school.student_service.service.IStudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,22 +27,59 @@ public class EventService implements IEventService {
 
     private IEventRepository repo;
 
+    private IStudentRepository studentRepo;
+
     @Override
     @Async
     public CompletableFuture<EventDTO> getById(UUID id) {
-        return CompletableFuture.completedFuture(EventMapper.toDTO(repo.getEventById(id)));
+        Event event = repo.getEventById(id);
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        for (UUID uuid: event.getStudentUUID()) {
+            studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+        }
+        EventDTO eventDTO = EventMapper.toDTO(event);
+        eventDTO.setStudentDTOS(studentDTOS);
+        return CompletableFuture.completedFuture(eventDTO);
     }
 
     @Override
     @Async
     public CompletableFuture<EventDTO> save(EventDTO eventDTO) {
-        return CompletableFuture.completedFuture(EventMapper.toDTO(repo.save(EventMapper.toEntity(eventDTO))));
+        Event event = EventMapper.toEntity(eventDTO);
+        List<UUID> studentUUIDs = eventDTO.getStudentUUID();
+        event.setStudentUUID(studentUUIDs);
+
+
+        Event savedEvent = repo.save(event);
+
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        for (UUID uuid : savedEvent.getStudentUUID()) {
+            studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+        }
+
+        EventDTO savedEventDTO = EventMapper.toDTO(savedEvent);
+        savedEventDTO.setStudentDTOS(studentDTOS);
+        return CompletableFuture.completedFuture(savedEventDTO);
     }
 
     @Override
     @Async
     public CompletableFuture<EventDTO> update(EventDTO eventDTO) {
-        return CompletableFuture.completedFuture(EventMapper.toDTO(repo.save(EventMapper.toEntity(eventDTO))));
+        Event event = EventMapper.toEntity(eventDTO);
+        List<UUID> studentUUIDs = eventDTO.getStudentUUID();
+        event.setStudentUUID(studentUUIDs);
+
+
+        Event savedEvent = repo.save(event);
+
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        for (UUID uuid : savedEvent.getStudentUUID()) {
+            studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+        }
+
+        EventDTO savedEventDTO = EventMapper.toDTO(savedEvent);
+        savedEventDTO.setStudentDTOS(studentDTOS);
+        return CompletableFuture.completedFuture(savedEventDTO);
     }
 
     @Override
@@ -51,7 +93,15 @@ public class EventService implements IEventService {
     public CompletableFuture<List<EventDTO>> findAll() {
         Iterable<Event> events = repo.findAll();
         List<EventDTO> eventDTOS = new ArrayList<>();
-        events.forEach(event -> eventDTOS.add(EventMapper.toDTO(event)));
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        events.forEach(event -> {
+            for (UUID uuid: event.getStudentUUID()) {
+                studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+            }
+            EventDTO dto = EventMapper.toDTO(event);
+            dto.setStudentDTOS(studentDTOS);
+            eventDTOS.add(dto);
+        });
         return CompletableFuture.completedFuture(eventDTOS);
     }
 
@@ -59,6 +109,16 @@ public class EventService implements IEventService {
     @Async
     public CompletableFuture<List<EventDTO>> findAll(Pageable pageable) {
         Page<Event> events = repo.findAll(pageable);
-        return CompletableFuture.completedFuture(events.map(EventMapper::toDTO).getContent());
+        List<EventDTO> eventDTOS = new ArrayList<>();
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        events.forEach(event -> {
+            for (UUID uuid: event.getStudentUUID()) {
+                studentDTOS.add(StudentMapper.toDTO(studentRepo.getStudentById(uuid)));
+            }
+            EventDTO dto = EventMapper.toDTO(event);
+            dto.setStudentDTOS(studentDTOS);
+            eventDTOS.add(dto);
+        });
+        return CompletableFuture.completedFuture(eventDTOS);
     }
 }

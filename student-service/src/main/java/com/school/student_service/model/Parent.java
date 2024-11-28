@@ -1,11 +1,6 @@
 package com.school.student_service.model;
 
-import jakarta.persistence.Table;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +24,10 @@ public class Parent {
     private String surname;
     private String phone;
     private String workAddress;
+
+    @ElementCollection
+    @CollectionTable(name = "student_uuid_parent", joinColumns = @JoinColumn(name = "student_id"))
+    private List<UUID> studentsUUID;
 
     @ManyToMany(cascade = CascadeType.MERGE)
     private List<Student> students;
