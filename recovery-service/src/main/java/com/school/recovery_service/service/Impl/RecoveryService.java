@@ -1,11 +1,13 @@
 package com.school.recovery_service.service.Impl;
 
-import com.school.recovery_service.configuration.RestTemplateConfig;
 import com.school.recovery_service.contract.RecoveryDTO;
+import com.school.recovery_service.contract.SanatoriumDTO;
 import com.school.recovery_service.contract.StudentDTO;
 import com.school.recovery_service.contract.mapper.RecoveryMapper;
+import com.school.recovery_service.contract.mapper.SanatoriumMapper;
 import com.school.recovery_service.model.Recovery;
 import com.school.recovery_service.repository.IRecoveryRepository;
+import com.school.recovery_service.repository.ISanatoriumRepository;
 import com.school.recovery_service.service.IRecoveryService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,27 +26,47 @@ import java.util.concurrent.CompletableFuture;
 public class RecoveryService implements IRecoveryService {
 
     private IRecoveryRepository repo;
+    private ISanatoriumRepository sanatoriumRepository;
+    private StudentService studentService;
 
     @Override
     @Async
     public CompletableFuture<RecoveryDTO> getById(UUID id) {
-        return CompletableFuture.completedFuture(RecoveryMapper.toDTO(repo.getRecoveryById(id)));
+        Recovery recovery = repo.getRecoveryById(id);
+        StudentDTO studentDTO = studentService.getObjectFromRemoteService(recovery.getIdStudent());
+        SanatoriumDTO sanatoriumDTO = SanatoriumMapper.toDTO(sanatoriumRepository.getSanatoriumById(recovery.getIdSanatorium()));
+        RecoveryDTO recoveryDTO = RecoveryMapper.toDTO(recovery);
+        recoveryDTO.setStudentDTO(studentDTO);
+        recoveryDTO.setSanatoriumDTO(sanatoriumDTO);
+        return CompletableFuture.completedFuture(recoveryDTO);
     }
 
     @Override
     @Async
     public CompletableFuture<RecoveryDTO> save(RecoveryDTO recoveryDTO) {
+        RecoveryDTO savedRecovery = RecoveryMapper.toDTO(repo.save(RecoveryMapper.toEntity(recoveryDTO)));
         StudentService studentService = new StudentService(new RestTemplate());
         StudentDTO studentDTO = studentService.getObjectFromRemoteService(recoveryDTO.getIdStudent());
+        SanatoriumDTO sanatoriumDTO = SanatoriumMapper.toDTO(sanatoriumRepository.getSanatoriumById(recoveryDTO.getIdSanatorium()));
         studentDTO.setSanatoriumCurrentYear(true);
         studentService.updateStudent(studentDTO);
-        return CompletableFuture.completedFuture(RecoveryMapper.toDTO(repo.save(RecoveryMapper.toEntity(recoveryDTO))));
+        savedRecovery.setStudentDTO(studentDTO);
+        savedRecovery.setSanatoriumDTO(sanatoriumDTO);
+        return CompletableFuture.completedFuture(savedRecovery);
     }
 
     @Override
     @Async
     public CompletableFuture<RecoveryDTO> update(RecoveryDTO recoveryDTO) {
-        return CompletableFuture.completedFuture(RecoveryMapper.toDTO(repo.save(RecoveryMapper.toEntity(recoveryDTO))));
+        RecoveryDTO savedRecovery = RecoveryMapper.toDTO(repo.save(RecoveryMapper.toEntity(recoveryDTO)));
+        studentService = new StudentService(new RestTemplate());
+        StudentDTO studentDTO = studentService.getObjectFromRemoteService(recoveryDTO.getIdStudent());
+        SanatoriumDTO sanatoriumDTO = SanatoriumMapper.toDTO(sanatoriumRepository.getSanatoriumById(recoveryDTO.getIdSanatorium()));
+        studentDTO.setSanatoriumCurrentYear(true);
+        studentService.updateStudent(studentDTO);
+        savedRecovery.setStudentDTO(studentDTO);
+        savedRecovery.setSanatoriumDTO(sanatoriumDTO);
+        return CompletableFuture.completedFuture(savedRecovery);
     }
 
     @Override
@@ -58,7 +80,14 @@ public class RecoveryService implements IRecoveryService {
     public CompletableFuture<List<RecoveryDTO>> findAll() {
         Iterable<Recovery> recoveries = repo.findAll();
         List<RecoveryDTO> recoveryDTOS = new ArrayList<>();
-        recoveries.forEach(recovery -> recoveryDTOS.add(RecoveryMapper.toDTO(recovery)));
+        recoveries.forEach(recovery -> {
+            StudentDTO studentDTO = studentService.getObjectFromRemoteService(recovery.getIdStudent());
+            SanatoriumDTO sanatoriumDTO = SanatoriumMapper.toDTO(sanatoriumRepository.getSanatoriumById(recovery.getIdSanatorium()));
+            RecoveryDTO recoveryDTO = RecoveryMapper.toDTO(recovery);
+            recoveryDTO.setStudentDTO(studentDTO);
+            recoveryDTO.setSanatoriumDTO(sanatoriumDTO);
+            recoveryDTOS.add(recoveryDTO);
+        });
         return CompletableFuture.completedFuture(recoveryDTOS);
     }
 
@@ -67,6 +96,15 @@ public class RecoveryService implements IRecoveryService {
     @Async
     public CompletableFuture<List<RecoveryDTO>> findAll(Pageable pageable) {
         Page<Recovery> recoveries = repo.findAll(pageable);
-        return CompletableFuture.completedFuture(recoveries.map(RecoveryMapper::toDTO).getContent());
+        List<RecoveryDTO> recoveryDTOS = new ArrayList<>();
+        recoveries.forEach(recovery -> {
+            StudentDTO studentDTO = studentService.getObjectFromRemoteService(recovery.getIdStudent());
+            SanatoriumDTO sanatoriumDTO = SanatoriumMapper.toDTO(sanatoriumRepository.getSanatoriumById(recovery.getIdSanatorium()));
+            RecoveryDTO recoveryDTO = RecoveryMapper.toDTO(recovery);
+            recoveryDTO.setStudentDTO(studentDTO);
+            recoveryDTO.setSanatoriumDTO(sanatoriumDTO);
+            recoveryDTOS.add(recoveryDTO);
+        });
+        return CompletableFuture.completedFuture(recoveryDTOS);
     }
 }

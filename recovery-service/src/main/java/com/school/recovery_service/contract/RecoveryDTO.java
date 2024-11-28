@@ -14,4 +14,6 @@ public class RecoveryDTO {
     private LocalDate endDate;
     private UUID idStudent;
     private UUID idSanatorium;
+    private StudentDTO studentDTO;
+    private SanatoriumDTO sanatoriumDTO;
 }

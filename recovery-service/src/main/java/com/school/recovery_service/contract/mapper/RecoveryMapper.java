@@ -12,7 +12,7 @@ public class RecoveryMapper {
                 .startDate(recoveryDTO.getStartDate())
                 .endDate(recoveryDTO.getEndDate())
                 .idStudent(recoveryDTO.getIdStudent())
-                .sanatorium(Sanatorium.builder().id(recoveryDTO.getIdSanatorium()).build())
+                .idSanatorium(recoveryDTO.getIdSanatorium())
                 .build();
     }
 
@@ -22,7 +22,8 @@ public class RecoveryMapper {
                 .startDate(recovery.getStartDate())
                 .endDate(recovery.getEndDate())
                 .idStudent(recovery.getIdStudent())
-                .idSanatorium(recovery.getSanatorium().getId())
+                .idSanatorium(recovery.getIdSanatorium())
+                .idSanatorium(recovery.getIdSanatorium())
                 .build();
     }
 }

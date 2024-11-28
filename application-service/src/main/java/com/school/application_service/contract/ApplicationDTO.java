@@ -15,4 +15,5 @@ public class ApplicationDTO {
     private int countDiet;
     private int totalCount;
     private UUID groupUUID;
+    private GroupDTO groupDTO;
 }

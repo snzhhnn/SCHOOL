@@ -22,6 +22,7 @@ public class Recovery {
     private LocalDate startDate;
     private LocalDate endDate;
     private UUID idStudent;
+    private UUID idSanatorium;
 
     @ManyToOne
     private Sanatorium sanatorium;

@@ -12,7 +12,7 @@ public class ApplicationMapper {
                 .countExtendedDay(applicationDTO.getCountExtendedDay())
                 .countDiet(applicationDTO.getCountDiet())
                 .totalCount(applicationDTO.getTotalCount())
-                .group(Group.builder().id(applicationDTO.getGroupUUID()).build())
+                .idGroup(applicationDTO.getGroupUUID())
                 .build();
     }
 
@@ -23,7 +23,7 @@ public class ApplicationMapper {
                 .countExtendedDay(application.getCountExtendedDay())
                 .countDiet(application.getCountDiet())
                 .totalCount(application.getTotalCount())
-                .groupUUID(application.getGroup().getId())
+                .groupUUID(application.getIdGroup())
                 .build();
     }
 }

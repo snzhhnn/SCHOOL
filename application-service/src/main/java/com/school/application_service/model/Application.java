@@ -23,6 +23,7 @@ public class Application {
     private int countExtendedDay;
     private int countDiet;
     private int totalCount;
+    private UUID idGroup;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Group group;
